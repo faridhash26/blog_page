@@ -35,7 +35,7 @@ class Post(models.Model):
     title = models.CharField('title', max_length=60)
     short_description = models.CharField('short description', max_length=100)
     description = models.TextField()
-    image = models.ImageField(upload_to='static/images', blank=True, null=True)
+    image = models.ImageField(upload_to='images', blank=True, null=True)
     create_on = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     wirter = models.ForeignKey(User, on_delete=models.DO_NOTHING)

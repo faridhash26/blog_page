@@ -1,5 +1,4 @@
 from django.urls import path
-from django.urls.conf import include
 from .views import PostPage, HomePage, AboutPage, ContactPage, Category_filter
 
 # the urls
