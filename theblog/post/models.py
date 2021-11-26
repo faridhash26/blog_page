@@ -1,9 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.text import slugify
 import random
 import string
 # Create your models here.
+User = get_user_model()
 
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
@@ -41,6 +42,7 @@ class Post(models.Model):
     wirter = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     category = models.ManyToManyField(Category)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    tag = models.ManyToManyField('Tag')
 
     def __str__(self) -> str:
         return self.title
@@ -59,3 +61,17 @@ class Comment(models.Model):
 
     def __str__(self) -> str:
         return f'{self.text[:10]} - {self.author} - {self.post}'
+
+
+class Tag(models.Model):
+    title = models.CharField('تاتیل', max_length=255)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "تگ ها "
+        verbose_name = "تگ"
+        db_table = 'tag'
+        ordering = ['-title', ]
+
+    def __str__(self):
+        return self.title
