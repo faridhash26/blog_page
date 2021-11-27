@@ -1,8 +1,12 @@
-from django.shortcuts import get_object_or_404, render, HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView
+from django.urls import reverse
+from django.contrib.auth import authenticate, login
+
 
 # from django.http import HttpResponse
 from .models import Post, Comment, Category
+from .forms import LoginForm
 # Create your views here.
 
 
@@ -49,3 +53,21 @@ class PostPage(DetailView):
             post=kwargs['object'].id)
 
         return context
+
+
+def login_view(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST or None)
+        if form.is_valid():
+            user = authenticate(username=form.cleaned_data.get(
+                'username'), password=form.cleaned_data.get('password'))
+            if user is not None:
+                login(request, user)
+                return redirect(reverse('home'))
+    else:
+        form = LoginForm()
+    return render(request, 'acounts/login.html', {'form': form})
+
+
+def register_view(request):
+    pass

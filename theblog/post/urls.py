@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostPage, HomePage, AboutPage, ContactPage, Category_filter
+from .views import PostPage, HomePage, AboutPage, ContactPage, Category_filter, login_view
 
 # the urls
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     path('about/', AboutPage, name='about'),
     path('contact/', ContactPage, name='contact'),
     path('post/<slug>/', PostPage.as_view(), name='post_detail'),
+    path('login/', login_view, name="login")
 ]
