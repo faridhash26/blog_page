@@ -1,12 +1,14 @@
+from .forms import LoginForm, UserRegister
+from .models import Post, Comment, Category
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from django.contrib.auth import logout
 
 
 # from django.http import HttpResponse
-from .models import Post, Comment, Category
-from .forms import LoginForm
 # Create your views here.
 
 
@@ -63,11 +65,22 @@ def login_view(request):
                 'username'), password=form.cleaned_data.get('password'))
             if user is not None:
                 login(request, user)
-                return redirect(reverse('home'))
+                return redirect(reverse('post:home'))
     else:
         form = LoginForm()
     return render(request, 'acounts/login.html', {'form': form})
 
 
-def register_view(request):
-    pass
+def myRegister(request):
+    form = UserRegister(None or request.POST)
+    if request.method == "POST":
+        if form.is_valid():
+            user = User.objects.create_user(
+                form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
+
+    return render(request, 'acounts/register.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("post:home")

@@ -9,3 +9,10 @@ class LoginForm(forms.Form):
     username = forms.CharField(
         max_length=255, min_length=3, label='نام کاربری')
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+
+class UserRegister(forms.ModelForm):
+    class Meta :
+        model = User
+        fields = ['username','email','password']

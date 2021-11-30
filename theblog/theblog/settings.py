@@ -145,3 +145,6 @@ INTERNAL_IPS = [
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'post.context_processors.add_variable_to_context')
+
+
+LOGOUT_REDIRECT_URL = 'post:home'

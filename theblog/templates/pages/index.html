@@ -25,7 +25,7 @@
             {% for post in posts %}
                 <!-- Post preview-->
                 <div class="post-preview">
-                    <a href="{% url 'post_detail' post.slug %}">
+                    <a href="{% url 'post:post_detail' post.slug %}">
                         <h2 class="post-title">{{post.title}}</h2>
                         <h3 class="post-subtitle">{{post.short_description}}</h3>
                     </a>
