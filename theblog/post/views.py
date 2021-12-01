@@ -1,4 +1,4 @@
-from .forms import LoginForm, UserRegister
+from .forms import LoginForm, UserRegister, CategoryModelForm
 from .models import Post, Comment, Category
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView
@@ -84,3 +84,42 @@ def myRegister(request):
 def logout_view(request):
     logout(request)
     return redirect("post:home")
+
+
+def all_category(req):
+    categorys = Category.objects.all()
+
+    return render(req, 'pages/category.html', {'categorys': list(categorys)})
+
+
+def category_edit(request, cat_id):
+    category = get_object_or_404(Category, id=cat_id)
+    form = CategoryModelForm(request.POST or None, instance=category)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('post:category'))
+
+    return render(request, 'forms/edit_category.html', {'form': form})
+
+
+def adding_new_category(request):
+    form = CategoryModelForm()
+    if request.method == "POST":
+        form = CategoryModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('post:category'))
+
+    return render(request, 'forms/edit_category.html', {'form': form})
+
+
+def delete_tag_form(request, cat_id):
+
+    category = get_object_or_404(Category, id=cat_id)
+
+    form = CategoryModelForm(instance=category)
+    if request.method == "POST":
+        category.delete()
+        return redirect(reverse('post:category'))
+
+    return render(request, 'forms/delete_category_form.html', {'form': form, 'category': category})
