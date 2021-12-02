@@ -22,3 +22,9 @@ class CategoryModelForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = "__all__"
+
+
+class PostModelForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ['wirter', 'slug']

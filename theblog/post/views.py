@@ -1,4 +1,4 @@
-from .forms import LoginForm, UserRegister, CategoryModelForm
+from .forms import LoginForm, PostModelForm, UserRegister, CategoryModelForm
 from .models import Post, Comment, Category
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView
@@ -6,8 +6,8 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
-
-
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 # from django.http import HttpResponse
 # Create your views here.
 
@@ -65,7 +65,8 @@ def login_view(request):
                 'username'), password=form.cleaned_data.get('password'))
             if user is not None:
                 login(request, user)
-                return redirect(reverse('post:home'))
+                messages.success(request, f'خوش امدید {user}')
+                return redirect(reverse('post:userdashbord'))
     else:
         form = LoginForm()
     return render(request, 'acounts/login.html', {'form': form})
@@ -113,7 +114,7 @@ def adding_new_category(request):
     return render(request, 'forms/edit_category.html', {'form': form})
 
 
-def delete_tag_form(request, cat_id):
+def delete_category_form(request, cat_id):
 
     category = get_object_or_404(Category, id=cat_id)
 
@@ -123,3 +124,48 @@ def delete_tag_form(request, cat_id):
         return redirect(reverse('post:category'))
 
     return render(request, 'forms/delete_category_form.html', {'form': form, 'category': category})
+
+
+@login_required(login_url="/login/")
+def admin_dashbord(request):
+    posts = Post.objects.filter(wirter__id=request.user.id).values(
+        'id', 'slug', 'title', 'short_description', 'wirter__username', 'create_on')
+
+    return render(request, 'pages/dashboard.html', {"posts": list(posts)})
+
+
+@login_required(login_url="/login/")
+def new_post(request):
+    form = PostModelForm()
+    if request.method == "POST":
+        form = PostModelForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.wirter = request.user
+            post.save()
+            return redirect(reverse('post:userdashbord'))
+    return render(request, 'forms/new_post.html', {'form': form})
+
+
+@login_required(login_url="/login/")
+def post_delete(request, postid):
+
+    user_post = get_object_or_404(Post, id=postid)
+
+    form = PostModelForm(instance=user_post)
+    if request.method == "POST":
+        user_post.delete()
+        return redirect(reverse('post:userdashbord'))
+
+    return render(request, 'forms/delete_post.html', {'form': form, 'post': user_post})
+
+
+@login_required(login_url="/login/")
+def post_edit(request, postid):
+    thepost = get_object_or_404(Post, id=postid)
+    form = PostModelForm(request.POST or None, instance=thepost)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('post:userdashbord'))
+
+    return render(request, 'forms/edit_post.html', {'form': form})
