@@ -28,3 +28,9 @@ class PostModelForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ['wirter', 'slug']
+
+
+class CommentModelForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        exclude = ["author", "post"]

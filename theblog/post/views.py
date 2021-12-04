@@ -1,4 +1,5 @@
-from .forms import LoginForm, PostModelForm, UserRegister, CategoryModelForm
+from django.db.models.query_utils import Q
+from .forms import CommentModelForm, LoginForm, PostModelForm, UserRegister, CategoryModelForm
 from .models import Post, Comment, Category
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView
@@ -14,6 +15,15 @@ from django.contrib import messages
 
 def add_variable_to_context(req):
     return {'categorys': Category.objects.all()}
+
+
+def search_page(requset):
+    if requset.method == "GET":
+        search_query = requset.GET.get('search_box', None)
+        posts = Post.objects.filter(
+            Q(title__icontains=search_query) | Q(short_description__icontains=search_query)).values(
+            'slug', 'title', 'short_description', 'wirter__username', 'create_on')
+    return render(requset, 'pages/searchpages.html', {'posts': list(posts)})
 
 
 def HomePage(req):
@@ -89,7 +99,6 @@ def logout_view(request):
 
 def all_category(req):
     categorys = Category.objects.all()
-
     return render(req, 'pages/category.html', {'categorys': list(categorys)})
 
 
@@ -99,7 +108,6 @@ def category_edit(request, cat_id):
     if form.is_valid():
         form.save()
         return redirect(reverse('post:category'))
-
     return render(request, 'forms/edit_category.html', {'form': form})
 
 
@@ -169,3 +177,23 @@ def post_edit(request, postid):
         return redirect(reverse('post:userdashbord'))
 
     return render(request, 'forms/edit_post.html', {'form': form})
+
+
+@login_required(login_url="/login/")
+def new_comment(request, postid):
+    thepost = get_object_or_404(Post, id=postid)
+
+    form = CommentModelForm()
+    if request.method == "POST":
+        form = CommentModelForm(request.POST)
+        if form.is_valid():
+            form.instance.author = request.user
+            form.instance.post = thepost
+            form.save()
+            # comment = form.save(commit=False)
+            # comment.author = request.user
+            # comment.post = thepost
+            # comment.save()
+            return redirect(reverse('post:post_detail', kwargs={'slug': thepost.slug}))
+
+    return render(request, 'forms/newcomment.html', {'form': form})

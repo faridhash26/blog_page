@@ -20,7 +20,7 @@
         {% endblock links %}
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+        <nav class="navbar navbar-expand-lg navbar-light" id="mainNav" >
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand" href="/">Start Bootstrap</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,12 +29,18 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarResponsive">
-                    <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/about/">About</a></li>
+                    <ul class="navbar-nav ms-auto py-4 py-lg-0" >
+                        <li class="nav-item">
+                            <form action="{% url 'post:search' %}" class="d-flex">
+                                <input  class="form-control me-2" type="search" name="search_box" placeholder="جست وجوی" aria-label="Search">
+                                <button class="btn btn-outline-success" type="submit">Search</button>
+                            </form>
+                        </li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/">خانه</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/about/">درباره ما </a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link px-lg-3 py-3 py-lg-4 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                              Dropdown
+                              دسته بندی ها
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 {% for category in categorys%}
@@ -43,14 +49,14 @@
                               {% endfor %}
                             </ul>
                           </li>
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/contact/">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/contact/">تماس با ما</a></li>
                         {% if user.is_authenticated %}
                             <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'post:userdashbord' %}">Hi{{ user.username }}</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'post:logout' %}">Log Out</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'post:logout' %}">خروج</a></li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/login/">Login</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/login/">ورود به حساب کاربری </a></li>
                         {% endif %}
-                        
+                     
                     </ul>
                 </div>
             </div>
