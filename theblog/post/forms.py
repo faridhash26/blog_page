@@ -14,9 +14,10 @@ class LoginForm(forms.Form):
 
 
 class UserRegister(forms.ModelForm):
+    password2 = forms.CharField(max_length=20 ,widget=forms.PasswordInput(attrs={"class": "form-control"}) )
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'password2']
 
 
 class CategoryModelForm(forms.ModelForm):

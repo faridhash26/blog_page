@@ -86,8 +86,12 @@ def myRegister(request):
     form = UserRegister(None or request.POST)
     if request.method == "POST":
         if form.is_valid():
-            user = User.objects.create_user(
-                form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
+            if form.cleaned_data['password2']==form.cleaned_data['password']:
+                user = User.objects.create_user(
+                    form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password']),
+                return redirect(reverse('post:login'))
+            else:
+                messages.warning(request, f'داداش اشتب زدی')
 
     return render(request, 'acounts/register.html', {'form': form})
 
@@ -146,7 +150,8 @@ def admin_dashbord(request):
 def new_post(request):
     form = PostModelForm()
     if request.method == "POST":
-        form = PostModelForm(request.POST)
+        form = PostModelForm(request.POST , request.FILES)
+
         if form.is_valid():
             post = form.save(commit=False)
             post.wirter = request.user
