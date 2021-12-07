@@ -1,6 +1,6 @@
 from django.db.models.query_utils import Q
-from .forms import CommentModelForm, LoginForm, PostModelForm, UserRegister, CategoryModelForm
-from .models import Post, Comment, Category
+from .forms import CommentModelForm, LoginForm, PostModelForm, TagModelForm, UserRegister, CategoryModelForm
+from .models import Post, Comment, Category, Tag
 from django.shortcuts import get_object_or_404, redirect, render, HttpResponse
 from django.views.generic import TemplateView, ListView, DetailView
 from django.urls import reverse
@@ -197,3 +197,39 @@ def new_comment(request, postid):
             return redirect(reverse('post:post_detail', kwargs={'slug': thepost.slug}))
 
     return render(request, 'forms/newcomment.html', {'form': form})
+
+
+def createTag(request):
+    form = TagModelForm()
+    if request.method == "POST":
+        form = TagModelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('post:alltags'))
+
+    return render(request, 'forms/newtag.html', {'form': form})
+
+
+def all_tags(req):
+    tags = Tag.objects.all()
+    return render(req, 'pages/tags.html', {'tags': list(tags)})
+
+
+def edit_tag(request, tagid):
+    tag = get_object_or_404(Tag, id=tagid)
+    form = TagModelForm(request.POST or None, instance=tag)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse('post:alltags'))
+    return render(request, 'forms/edit_tag.html', {'form': form})
+
+
+def delete_tag(request, tagid):
+    tag = get_object_or_404(Tag, id=tagid)
+
+    form = TagModelForm(instance=tag)
+    if request.method == "POST":
+        tag.delete()
+        return redirect(reverse('post:alltags'))
+
+    return render(request, 'forms/delete_tag.html', {'form': form, 'tag': tag})

@@ -26,7 +26,7 @@ def unique_slugify(instance, slug):
 class Category(models.Model):
     title = models.CharField('category title ', max_length=40)
     parent = models.ForeignKey(
-        'self', blank=True, null=True, on_delete=models.PROTECT)
+        'self', blank=True, null=True, on_delete=models.DO_NOTHING)
 
     def __str__(self) -> str:
         return self.title

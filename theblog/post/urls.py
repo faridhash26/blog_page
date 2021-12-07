@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import PostPage, HomePage, AboutPage, ContactPage, Category_filter, adding_new_category, admin_dashbord, all_category, category_edit, delete_category_form, login_view, logout_view, myRegister, new_comment, new_post, post_delete, post_edit, search_page
+from .views import PostPage, HomePage, AboutPage, ContactPage, Category_filter, adding_new_category, admin_dashbord, all_category, all_tags, category_edit, createTag, delete_category_form, delete_tag, edit_tag, login_view, logout_view, myRegister, new_comment, new_post, post_delete, post_edit, search_page
 
 # the urls
 app_name = 'post'
@@ -23,5 +23,9 @@ urlpatterns = [
     path('editpost/<int:postid>', post_edit, name='editpost'),
     path('newcomment/<int:postid>', new_comment, name="newcomment"),
     path('search/', search_page, name='search'),
+    path('tags/', all_tags, name="alltags"),
+    path('newtag/', createTag, name="newtag"),
+    path('edittag/<int:tagid>', edit_tag, name='tag_edit'),
+    path('deletetag/<int:tagid>', delete_tag, name="deletetag")
 
 ]
