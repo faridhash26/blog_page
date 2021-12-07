@@ -40,6 +40,15 @@
                         <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/about/">درباره ما </a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link px-lg-3 py-3 py-lg-4 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             جدید
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/tags/"> تگ ها   </a></li>
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/categorys/"> دسته بندی ها  </a></li>
+                            </ul>
+                          </li> 
+                        <li class="nav-item dropdown">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                               دسته بندی ها
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -54,7 +63,15 @@
                             <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'post:userdashbord' %}">Hi{{ user.username }}</a></li>
                             <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{% url 'post:logout' %}">خروج</a></li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/login/">ورود به حساب کاربری </a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link px-lg-3 py-3 py-lg-4 dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                             حساب
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/login/">ورود به حساب کاربری </a></li>
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="/register/">ثبت نام </a></li>
+                            </ul>
+                          </li> 
                         {% endif %}
                      
                     </ul>
